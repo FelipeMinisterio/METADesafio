@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ScheduleDTO {
+	public ScheduleDTO() {
+		this.tennisCourt = new TennisCourtDTO();
+	}
 
     private Long id;
 

@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -17,15 +20,23 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Builder
 @Data
-public class CreateReservationRequestDTO {
-
+public class CreateReservationsRequestDTOs {
+	
+    @NotNull
+    private LocalDateTime startDateTime;
+    
+    @NotNull
+    private LocalDateTime endDateTime;
+    
     @NotNull
     private Long guestId;
 
     @NotNull
-    private Long scheduleId;
+    private List<Long> tennisCourtId;
     
     @NotNull
     private BigDecimal value;
+    
+    
 
 }

@@ -11,13 +11,14 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table
 @Getter
-@Setter
+//@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,8 +26,29 @@ import javax.validation.constraints.NotNull;
 @ToString
 public class Guest extends BaseEntity<Long> {
 
+  /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5214019933381446324L;
+
+  @Id
+  @Column
+  @NotNull
+  private Long id;
+  
   @Column
   @NotNull
   private String name;
+
+public void setId(Long id) {
+	this.id = id;
+}
+
+public void setName(String name) {
+	this.name = name;
+}
+  
+  
+  
 
 }

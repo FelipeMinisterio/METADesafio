@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -23,12 +24,22 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
+//@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Builder
 public class Reservation extends BaseEntity<Long> {
 
-    @OneToOne
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5855939400888692068L;
+	public Reservation() {
+		this.guest = new Guest();
+		this.schedule = new Schedule();
+	}
+
+	@OneToOne
+	@JoinColumn(name = "guest_id",referencedColumnName = "id")
     private Guest guest;
 
     @ManyToOne

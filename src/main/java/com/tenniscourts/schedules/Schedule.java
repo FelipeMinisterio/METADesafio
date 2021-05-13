@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -26,11 +27,22 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = "reservations")
 public class Schedule extends BaseEntity<Long> {
 
-    @ManyToOne
+    public Schedule() {
+    	this.tennisCourt = new TennisCourt();
+    }
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 983630047066410742L;
+	
+	@Id
+	@Column
+	private Long id;
+
+	@ManyToOne
     @NotNull
     private TennisCourt tennisCourt;
 

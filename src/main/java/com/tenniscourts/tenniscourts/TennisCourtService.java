@@ -9,25 +9,44 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class TennisCourtService {
 
-    private final TennisCourtRepository tennisCourtRepository;
+	private final TennisCourtRepository tennisCourtRepository;
 
-    private final ScheduleService scheduleService;
+	private final ScheduleService scheduleService;
 
-    private final TennisCourtMapper tennisCourtMapper;
+	private final TennisCourtMapper tennisCourtMapper;
 
-    public TennisCourtDTO addTennisCourt(TennisCourtDTO tennisCourt) {
-        return tennisCourtMapper.map(tennisCourtRepository.saveAndFlush(tennisCourtMapper.map(tennisCourt)));
-    }
+	public TennisCourtService() {
+		this.tennisCourtMapper = new TennisCourtMapper() {
 
-    public TennisCourtDTO findTennisCourtById(Long id) {
-        return tennisCourtRepository.findById(id).map(tennisCourtMapper::map).orElseThrow(() -> {
-            throw new EntityNotFoundException("Tennis Court not found.");
-        });
-    }
+			@Override
+			public TennisCourt map(TennisCourtDTO source) {
+				// TODO Auto-generated method stub
+				return null;
+			}
 
-    public TennisCourtDTO findTennisCourtWithSchedulesById(Long tennisCourtId) {
-        TennisCourtDTO tennisCourtDTO = findTennisCourtById(tennisCourtId);
-        tennisCourtDTO.setTennisCourtSchedules(scheduleService.findSchedulesByTennisCourtId(tennisCourtId));
-        return tennisCourtDTO;
-    }
+			@Override
+			public TennisCourtDTO map(TennisCourt source) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		this.scheduleService = new ScheduleService();
+		this.tennisCourtRepository = null;
+	}
+
+	public TennisCourtDTO addTennisCourt(TennisCourtDTO tennisCourt) {
+		return tennisCourtMapper.map(tennisCourtRepository.saveAndFlush(tennisCourtMapper.map(tennisCourt)));
+	}
+
+	public TennisCourtDTO findTennisCourtById(Long id) {
+		return tennisCourtRepository.findById(id).map(tennisCourtMapper::map).orElseThrow(() -> {
+			throw new EntityNotFoundException("Tennis Court not found.");
+		});
+	}
+
+	public TennisCourtDTO findTennisCourtWithSchedulesById(Long tennisCourtId) {
+		TennisCourtDTO tennisCourtDTO = findTennisCourtById(tennisCourtId);
+		tennisCourtDTO.setTennisCourtSchedules(scheduleService.findSchedulesByTennisCourtId(tennisCourtId));
+		return tennisCourtDTO;
+	}
 }
