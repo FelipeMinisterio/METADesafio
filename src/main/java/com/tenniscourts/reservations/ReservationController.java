@@ -13,6 +13,10 @@ import org.springframework.stereotype.Controller;
 public class ReservationController extends BaseRestController {
 
     private final ReservationService reservationService;
+    
+    public ResponseEntity<List<Integer>> findFreeSchedule(String dateSchedule){
+    	return ResponseEntity.ok(reservationService.findFreeSchedule(dateSchedule));
+    }
 
     public ResponseEntity<Void> bookReservation(CreateReservationRequestDTO createReservationRequestDTO) {
         return ResponseEntity.created(locationByEntity(reservationService.bookReservation(createReservationRequestDTO).getId())).build();

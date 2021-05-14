@@ -32,5 +32,9 @@ public class ReservationRestController {
 		public ResponseEntity<List<ReservationDTO>>bookReservations(CreateReservationsRequestDTOs createReservationsRequestDTOs){
 			return reservationController.bookReservations(createReservationsRequestDTOs);		
 		}
+		@GetMapping(value="/freeSchedule")
+		public ResponseEntity<List<Integer>>findFreeSchedule(String dateSchedule){
+			return reservationController.findFreeSchedule(dateSchedule);
+		}
 		 
 }

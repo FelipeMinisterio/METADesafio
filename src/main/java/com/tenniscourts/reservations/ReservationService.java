@@ -1,11 +1,8 @@
 package com.tenniscourts.reservations;
 
 import com.tenniscourts.exceptions.EntityNotFoundException;
-import com.tenniscourts.schedules.CreateScheduleRequestDTO;
 import com.tenniscourts.schedules.Schedule;
 import com.tenniscourts.schedules.ScheduleDTO;
-import com.tenniscourts.schedules.ScheduleDTO;
-import com.tenniscourts.schedules.ScheduleMapper;
 import com.tenniscourts.schedules.ScheduleMapperImpl;
 import com.tenniscourts.schedules.ScheduleRepository;
 
@@ -15,9 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,15 +39,48 @@ public class ReservationService {
 				.map(reservationRepository.saveAndFlush(reservationMapper.map(createReservationRequestDTO)));
 	}
 
+	public List<Integer> findFreeSchedule(String dateSchedule) {
+			List<Integer> dayHours = new ArrayList<Integer>();
+			dayHours.add(8);dayHours.add(9);dayHours.add(10);dayHours.add(11);dayHours.add(12);dayHours.add(13);dayHours.add(14);
+			dayHours.add(15);dayHours.add(16);dayHours.add(17);dayHours.add(18);dayHours.add(19);dayHours.add(20);dayHours.add(21);
+		try {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateSchedule);
+			List<Date> schedulesDates = new ArrayList<Date>();
+			List<Schedule> schedules = scheduleRepository.findByStartDateTimeContains(dateSchedule);
+			for (Schedule schedule : schedules) {
+				String scheduleDate = "" + schedule.getStartDateTime().getYear() + "-"
+						+ schedule.getStartDateTime().getMonthValue() + "-" + schedule.getStartDateTime().getDayOfMonth();
+				schedulesDates.add(new SimpleDateFormat("yyy-MM-dd").parse(scheduleDate));
+			}
+			for (int y=0;y<schedulesDates.size();y++) {
+				if (schedulesDates.get(y).equals(date)) {
+						for(int x=0;x<dayHours.size();x++) {
+						if(schedules.get(y).getStartDateTime().getHour() == dayHours.get(x)) {
+							dayHours.remove(x);
+						}
+					}
+					
+				} else {
+					return dayHours;
+				}
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return dayHours;
+	}
+
 	public List<ReservationDTO> bookReservations(CreateReservationsRequestDTOs createReservationsRequestDTOs) {
 		List<ReservationDTO> listaReservas = new ArrayList<ReservationDTO>();
 		for (Long id : createReservationsRequestDTOs.getTennisCourtId()) {
 			ScheduleDTO schedule = new ScheduleDTO();
-			schedule.setStartDateTime(createReservationsRequestDTOs.getStartDateTime());
-			schedule.setEndDateTime(createReservationsRequestDTOs.getEndDateTime());
+			schedule.setStartDateTime(LocalDateTime.parse(createReservationsRequestDTOs.getStartDateTime()));
+			schedule.setEndDateTime(LocalDateTime.parse(createReservationsRequestDTOs.getEndDateTime()));
 			schedule.setTennisCourtId(id);
 			ScheduleDTO scheduleDTO = scheduleMapper.map(scheduleRepository.saveAndFlush(scheduleMapper.map(schedule)));
-			//salvo o schedule
+			// salvo o schedule
 			ReservationDTO reservationDTO = new ReservationDTO();
 			reservationDTO.setScheduledId(scheduleDTO.getId());
 			reservationDTO.setValue(createReservationsRequestDTOs.getValue());
@@ -64,6 +98,7 @@ public class ReservationService {
 			throw new EntityNotFoundException("Reservation not found.");
 		});
 	}
+
 	public List<Reservation> findAllReservations() {
 		return reservationRepository.findAll();
 	}
