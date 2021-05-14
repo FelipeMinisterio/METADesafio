@@ -163,7 +163,7 @@ public class ReservationService {
 		reservationRepository.save(previousReservation);
 
 		ReservationDTO newReservation = bookReservation(CreateReservationRequestDTO.builder()
-				.guestId(previousReservation.getGuest().getId()).scheduleId(scheduleId).build());
+				.guestId(previousReservation.getGuest().getId()).value(previousReservation.getValue()).scheduleId(scheduleId).build());
 		newReservation.setPreviousReservation(reservationMapper.map(previousReservation));
 		return newReservation;
 	}

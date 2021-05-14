@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,5 +37,14 @@ public class ReservationRestController {
 		public ResponseEntity<List<Integer>>findFreeSchedule(String dateSchedule){
 			return reservationController.findFreeSchedule(dateSchedule);
 		}
+		@PostMapping(value="/cancel")
+		public ResponseEntity<ReservationDTO> cancelReservation(Long reservationId){
+			return reservationController.cancelReservation(reservationId);
+		}
+		@PutMapping(value="/Edit")
+		public ResponseEntity<ReservationDTO> editReservation(Long reservationId, Long scheduleId){
+			return reservationController.rescheduleReservation(reservationId, scheduleId);
+		}
+		
 		 
 }
