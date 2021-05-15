@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table
 @Getter
-//@Setter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,22 +33,10 @@ public class Guest extends BaseEntity<Long> {
 
   @Id
   @Column
-  @NotNull
   private Long id;
   
   @Column
   @NotNull
   private String name;
-
-public void setId(Long id) {
-	this.id = id;
-}
-
-public void setName(String name) {
-	this.name = name;
-}
-  
-  
-  
 
 }

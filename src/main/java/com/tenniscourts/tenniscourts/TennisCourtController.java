@@ -3,8 +3,10 @@ package com.tenniscourts.tenniscourts;
 import com.tenniscourts.config.BaseRestController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 
 @AllArgsConstructor
+@Controller
 public class TennisCourtController extends BaseRestController {
 
     private final TennisCourtService tennisCourtService;
