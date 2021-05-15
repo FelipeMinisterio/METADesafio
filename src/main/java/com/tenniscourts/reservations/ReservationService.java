@@ -139,9 +139,22 @@ public class ReservationService {
 
 	public BigDecimal getRefundValue(Reservation reservation) {
 		long hours = ChronoUnit.HOURS.between(LocalDateTime.now(), reservation.getSchedule().getStartDateTime());
+		BigDecimal cancelRescheduleFee = new BigDecimal(2.5);
 
 		if (hours >= 24) {
 			return reservation.getValue();
+		}
+		if(hours >= 12 && hours <= 23) {
+			reservation.setRefundValue(cancelRescheduleFee);
+			return reservation.getValue().subtract(reservation.getRefundValue());
+		}
+		if(hours >= 2 && hours <= 11) {
+			reservation.setRefundValue(cancelRescheduleFee.multiply(new BigDecimal(2)));
+			return reservation.getValue().subtract(reservation.getRefundValue());
+
+		}if(hours >= 0 && hours <= 2) {
+			reservation.setRefundValue(cancelRescheduleFee.multiply(new BigDecimal(3)));
+			return reservation.getValue().subtract(reservation.getRefundValue());
 		}
 
 		return BigDecimal.ZERO;
@@ -162,7 +175,7 @@ public class ReservationService {
 		reservationRepository.save(previousReservation);
 
 		ReservationDTO newReservation = bookReservation(CreateReservationRequestDTO.builder()
-				.guestId(previousReservation.getGuest().getId()).value(previousReservation.getValue()).scheduleId(scheduleId).build());
+				.guestId(previousReservation.getGuest().getId()).value(previousReservation.getRefundValue()).scheduleId(scheduleId).build());
 		newReservation.setPreviousReservation(reservationMapper.map(previousReservation));
 		return newReservation;
 	}

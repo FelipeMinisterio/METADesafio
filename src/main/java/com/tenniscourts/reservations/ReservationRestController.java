@@ -45,6 +45,10 @@ public class ReservationRestController {
 		public ResponseEntity<ReservationDTO> editReservation(Long reservationId, Long scheduleId){
 			return reservationController.rescheduleReservation(reservationId, scheduleId);
 		}
+		@PutMapping(value="/rescheduling")
+		public ResponseEntity<ReservationDTO> rescheduleReservation(Long previousReservationId, Long scheduleId){
+			return reservationController.rescheduleReservation(previousReservationId, scheduleId);
+		}
 		
 		 
 }

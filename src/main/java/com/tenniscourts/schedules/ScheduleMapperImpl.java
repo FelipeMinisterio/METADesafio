@@ -1,5 +1,6 @@
 package com.tenniscourts.schedules;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -31,6 +32,15 @@ public class ScheduleMapperImpl implements ScheduleMapper{
 	public List<ScheduleDTO> map(List<Schedule> source) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Schedule map(CreateScheduleRequestDTO createScheduleRequestDTO) {
+		Schedule schedule = new Schedule();
+		schedule.getTennisCourt().setId(createScheduleRequestDTO.getTennisCourtId());
+		LocalDateTime time = LocalDateTime.parse(createScheduleRequestDTO.getStartDateTime());
+		schedule.setStartDateTime(time);
+		schedule.setEndDateTime(time.plusHours(1));
+		return schedule;
 	}
 
 }

@@ -1,16 +1,20 @@
 package com.tenniscourts.reservations;
 
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class ReservationMapperImpl implements ReservationMapper{
 	@Override
 	public Reservation map(CreateReservationRequestDTO source) {
-		Reservation reservation = new Reservation();
+		BigDecimal fee = new BigDecimal(10);
+ 		Reservation reservation = new Reservation();
 		reservation.getGuest().setId(source.getGuestId());
 		reservation.getSchedule().setId(source.getScheduleId());
-		reservation.setValue(source.getValue());
+		reservation.setValue(source.getValue().add(fee));
 		reservation.setReservationStatus(ReservationStatus.READY_TO_PLAY);
+		reservation.setRefundValue(fee);
 		return reservation;
 	}
 
@@ -28,11 +32,13 @@ public class ReservationMapperImpl implements ReservationMapper{
 
 	@Override
 	public Reservation map(ReservationDTO source) {
+		BigDecimal fee = new BigDecimal(10);
 		Reservation reservation = new Reservation();
 		reservation.getGuest().setId(source.getGuestId());
-		reservation.setValue(source.getValue());
+		reservation.setValue(source.getValue().add(fee));
 		reservation.getSchedule().setId(source.getScheduledId());
 		reservation.setReservationStatus(ReservationStatus.READY_TO_PLAY);
+		reservation.setRefundValue(fee);
 		
 		return reservation;
 	}

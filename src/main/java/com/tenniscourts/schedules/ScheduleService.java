@@ -12,38 +12,10 @@ public class ScheduleService {
 
 	private final ScheduleRepository scheduleRepository;
 
-	private final ScheduleMapper scheduleMapper;
-
-	public ScheduleService() {
-		this.scheduleMapper = new ScheduleMapper() {
-
-			@Override
-			public List<ScheduleDTO> map(List<Schedule> source) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public ScheduleDTO map(Schedule source) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public Schedule map(ScheduleDTO source) {
-				Schedule schedule = new Schedule();
-				schedule.setStartDateTime(source.getStartDateTime());
-				schedule.setEndDateTime(source.getEndDateTime());
-				schedule.getTennisCourt().setId(source.getId());
-				return schedule;
-			}
-		};
-		this.scheduleRepository = null;
-	}
+	private final ScheduleMapperImpl scheduleMapper;
 
 	public ScheduleDTO addSchedule(Long tennisCourtId, CreateScheduleRequestDTO createScheduleRequestDTO) {
-		// TODO: implement addSchedule
-		return null;
+		return scheduleMapper.map(scheduleRepository.saveAndFlush(scheduleMapper.map(createScheduleRequestDTO)));
 	}
 
 	public List<ScheduleDTO> findSchedulesByDates(LocalDateTime startDate, LocalDateTime endDate) {

@@ -3,6 +3,7 @@ package com.tenniscourts.schedules;
 import com.tenniscourts.config.BaseRestController;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @AllArgsConstructor
+@Controller
 public class ScheduleController extends BaseRestController {
 
     private final ScheduleService scheduleService;
