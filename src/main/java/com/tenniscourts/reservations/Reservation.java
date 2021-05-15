@@ -13,10 +13,13 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -36,6 +39,7 @@ public class Reservation extends BaseEntity<Long> {
 	public Reservation() {
 		this.guest = new Guest();
 		this.schedule = new Schedule();
+		this.schedules = new ArrayList<Schedule>();
 	}
 
 	@OneToOne
@@ -53,4 +57,7 @@ public class Reservation extends BaseEntity<Long> {
     private ReservationStatus reservationStatus = ReservationStatus.READY_TO_PLAY;
 
     private BigDecimal refundValue;
+    
+    @OneToMany
+    private List<Schedule> schedules;
 }

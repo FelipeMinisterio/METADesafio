@@ -11,6 +11,7 @@ public class ScheduleMapperImpl implements ScheduleMapper{
 	@Override
 	public Schedule map(ScheduleDTO source) {
 		Schedule schedule = new Schedule();
+		schedule.setId(source.getId());
 		schedule.setStartDateTime(source.getStartDateTime());
 		schedule.setEndDateTime(source.getEndDateTime());
 		schedule.getTennisCourt().setId(source.getTennisCourtId());

@@ -18,7 +18,7 @@ insert
         schedule
         (id, start_date_time, end_date_time, tennis_court_id)
     values
-        (null, '2021-05-15T20:00:00.0', '2021-05-15T21:00:00.0', 2);
+        (null, '2021-05-16T20:00:00.0', '2021-05-16T21:00:00.0', 2);
         
                 insert
     into

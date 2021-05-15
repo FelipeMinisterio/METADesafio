@@ -15,6 +15,7 @@ public class ReservationMapperImpl implements ReservationMapper{
 		reservation.setValue(source.getValue().add(fee));
 		reservation.setReservationStatus(ReservationStatus.READY_TO_PLAY);
 		reservation.setRefundValue(fee);
+		reservation.getSchedules().add(reservation.getSchedule());
 		return reservation;
 	}
 
@@ -39,6 +40,7 @@ public class ReservationMapperImpl implements ReservationMapper{
 		reservation.getSchedule().setId(source.getScheduledId());
 		reservation.setReservationStatus(ReservationStatus.READY_TO_PLAY);
 		reservation.setRefundValue(fee);
+		reservation.getSchedules().add(reservation.getSchedule());
 		
 		return reservation;
 	}

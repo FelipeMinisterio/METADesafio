@@ -166,6 +166,9 @@ public class ReservationService {
 	 */
 	public ReservationDTO rescheduleReservation(Long previousReservationId, Long scheduleId) {
 		Reservation previousReservation = cancel(previousReservationId);
+//		previousReservation.getSchedules().add(scheduleMapper.map(scheduleRepository.findById(scheduleId).map(scheduleMapper::map).orElseThrow(() -> {
+//			throw new EntityNotFoundException("Schedule not found.");
+//		})));
 
 		if (scheduleId.equals(previousReservation.getSchedule().getId())) {
 			throw new IllegalArgumentException("Cannot reschedule to the same slot.");
@@ -175,7 +178,7 @@ public class ReservationService {
 		reservationRepository.save(previousReservation);
 
 		ReservationDTO newReservation = bookReservation(CreateReservationRequestDTO.builder()
-				.guestId(previousReservation.getGuest().getId()).value(previousReservation.getRefundValue()).scheduleId(scheduleId).build());
+				.guestId(previousReservation.getGuest().getId()).value(previousReservation.getRefundValue().add(previousReservation.getValue()).subtract(new BigDecimal(10))).scheduleId(scheduleId).build());
 		newReservation.setPreviousReservation(reservationMapper.map(previousReservation));
 		return newReservation;
 	}
