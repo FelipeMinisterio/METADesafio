@@ -31,8 +31,8 @@ public class CreateReservationsRequestDTOs {
     @NotNull
     private String startDateTime; //O Swagger nao esta enviando com LocalDateTime ao java
 
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm")
-    private String endDateTime; //O Swagger nao esta enviando com LocalDateTime ao java
+//    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm")
+//    private String endDateTime; //O Swagger nao esta enviando com LocalDateTime ao java
 
     @NotNull
     private List<Long> tennisCourtId;

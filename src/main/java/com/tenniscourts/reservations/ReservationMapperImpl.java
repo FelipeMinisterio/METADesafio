@@ -33,12 +33,16 @@ public class ReservationMapperImpl implements ReservationMapper{
 
 	@Override
 	public Reservation map(ReservationDTO source) {
-		BigDecimal fee = new BigDecimal(10);
 		Reservation reservation = new Reservation();
-		reservation.getGuest().setId(source.getGuestId());
+		BigDecimal fee = new BigDecimal(10);
+		if(source.getRefundValue() == null) {
 		reservation.setValue(source.getValue().add(fee));
+		}
+		reservation.setId(source.getId());
+		reservation.getGuest().setId(source.getGuestId());
 		reservation.getSchedule().setId(source.getScheduledId());
 		reservation.setReservationStatus(ReservationStatus.READY_TO_PLAY);
+		reservation.setValue(source.getValue());
 		reservation.setRefundValue(fee);
 		reservation.getSchedules().add(reservation.getSchedule());
 		

@@ -14,8 +14,8 @@ public class ReservationController extends BaseRestController {
 
     private final ReservationService reservationService;
     
-    public ResponseEntity<List<Integer>> findFreeSchedule(String dateSchedule){
-    	return ResponseEntity.ok(reservationService.findFreeSchedule(dateSchedule));
+    public ResponseEntity<List<Integer>> findFreeSchedule(String dateSchedule,Long tennisCourtId){
+    	return ResponseEntity.ok(reservationService.findFreeSchedule(dateSchedule,tennisCourtId));
     }
 
     public ResponseEntity<Void> bookReservation(CreateReservationRequestDTO createReservationRequestDTO) {
@@ -39,4 +39,8 @@ public class ReservationController extends BaseRestController {
     public ResponseEntity<ReservationDTO> rescheduleReservation(Long reservationId, Long scheduleId) {
         return ResponseEntity.ok(reservationService.rescheduleReservation(reservationId, scheduleId));
     }
+
+	public ResponseEntity<Reservation> editReservation(Long reservationId, String reservationStatus) {
+		return ResponseEntity.ok(reservationService.editReservation(reservationId, reservationStatus));
+	}
 }

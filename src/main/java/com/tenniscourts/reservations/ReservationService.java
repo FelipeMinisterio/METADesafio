@@ -38,14 +38,14 @@ public class ReservationService {
 				.map(reservationRepository.saveAndFlush(reservationMapper.map(createReservationRequestDTO)));
 	}
 
-	public List<Integer> findFreeSchedule(String dateSchedule) {
+	public List<Integer> findFreeSchedule(String dateSchedule,Long tennisCourtId) {
 			List<Integer> dayHours = new ArrayList<Integer>();
 			dayHours.add(8);dayHours.add(9);dayHours.add(10);dayHours.add(11);dayHours.add(12);dayHours.add(13);dayHours.add(14);
 			dayHours.add(15);dayHours.add(16);dayHours.add(17);dayHours.add(18);dayHours.add(19);dayHours.add(20);dayHours.add(21);
 		try {
 			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateSchedule);
 			List<Date> schedulesDates = new ArrayList<Date>();
-			List<Schedule> schedules = scheduleRepository.findByStartDateTimeContains(dateSchedule);
+			List<Schedule> schedules = scheduleRepository.findByStartDateTimeContains(dateSchedule,tennisCourtId);
 			for (Schedule schedule : schedules) {
 				String scheduleDate = "" + schedule.getStartDateTime().getYear() + "-"
 						+ schedule.getStartDateTime().getMonthValue() + "-" + schedule.getStartDateTime().getDayOfMonth();
@@ -64,8 +64,7 @@ public class ReservationService {
 				}
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new EntityNotFoundException("Date is not correct.");
 		}
 
 		return dayHours;
@@ -76,7 +75,7 @@ public class ReservationService {
 		for (Long id : createReservationsRequestDTOs.getTennisCourtId()) {
 			ScheduleDTO schedule = new ScheduleDTO();
 			schedule.setStartDateTime(LocalDateTime.parse(createReservationsRequestDTOs.getStartDateTime()));
-			schedule.setEndDateTime(LocalDateTime.parse(createReservationsRequestDTOs.getEndDateTime()));
+			schedule.setEndDateTime(schedule.getStartDateTime().plusHours(1));
 			schedule.setTennisCourtId(id);
 			ScheduleDTO scheduleDTO = scheduleMapper.map(scheduleRepository.saveAndFlush(scheduleMapper.map(schedule)));
 			// salvo o schedule
@@ -166,9 +165,6 @@ public class ReservationService {
 	 */
 	public ReservationDTO rescheduleReservation(Long previousReservationId, Long scheduleId) {
 		Reservation previousReservation = cancel(previousReservationId);
-//		previousReservation.getSchedules().add(scheduleMapper.map(scheduleRepository.findById(scheduleId).map(scheduleMapper::map).orElseThrow(() -> {
-//			throw new EntityNotFoundException("Schedule not found.");
-//		})));
 
 		if (scheduleId.equals(previousReservation.getSchedule().getId())) {
 			throw new IllegalArgumentException("Cannot reschedule to the same slot.");
@@ -181,5 +177,17 @@ public class ReservationService {
 				.guestId(previousReservation.getGuest().getId()).value(previousReservation.getRefundValue().add(previousReservation.getValue()).subtract(new BigDecimal(10))).scheduleId(scheduleId).build());
 		newReservation.setPreviousReservation(reservationMapper.map(previousReservation));
 		return newReservation;
+	}
+
+	public Reservation editReservation(Long reservationId, String reservationStatus) {
+		Reservation reservation = reservationMapper.map(reservationRepository.findById(reservationId).map(reservationMapper::map).orElseThrow(() -> {
+			throw new EntityNotFoundException("Reservation not found.");
+		}));
+		if(reservationStatus.equals(ReservationStatus.FINISHED.name())) {
+			 return this.updateReservation(reservation, reservation.getValue(), ReservationStatus.FINISHED);
+		}if(reservationStatus.equals(ReservationStatus.GUEST_ABSCENCE.name())) {
+			return this.updateReservation(reservation, new BigDecimal(0), ReservationStatus.GUEST_ABSCENCE);
+		}
+		return reservation;
 	}
 }
